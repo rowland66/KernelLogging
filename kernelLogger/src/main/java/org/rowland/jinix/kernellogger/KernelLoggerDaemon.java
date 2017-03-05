@@ -1,5 +1,6 @@
 package org.rowland.jinix.kernellogger;
 
+import org.rowland.jinix.exec.InvalidExecutableException;
 import org.rowland.jinix.lang.JinixRuntime;
 import org.rowland.jinix.lang.ProcessSignalHandler;
 import org.rowland.jinix.logger.LogServer;
@@ -34,7 +35,7 @@ public class KernelLoggerDaemon {
                     } else {
                         throw new RuntimeException("fork return error");
                     }
-                } catch (FileNotFoundException e) {
+                } catch (FileNotFoundException | InvalidExecutableException e) {
                     throw new RuntimeException(e);
                 }
             }
@@ -71,7 +72,7 @@ public class KernelLoggerDaemon {
                         logStream.flush();
                     }
 
-                    if (logs.length < LOG_BATCH_SIZE) {
+                    if (logs == null || logs.length < LOG_BATCH_SIZE) {
                         try {
                             Thread.sleep(1000);
                         } catch (InterruptedException e) {
