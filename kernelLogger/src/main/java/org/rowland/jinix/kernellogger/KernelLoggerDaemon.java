@@ -42,18 +42,8 @@ public class KernelLoggerDaemon {
 
             mainThread = Thread.currentThread();
 
-            JinixRuntime.getRuntime().registerSignalHandler(new ProcessSignalHandler() {
-                @Override
-                public void handleSignal(ProcessManager.Signal signal) {
-                    if (signal == ProcessManager.Signal.HANGUP) {
-                        return;
-                    }
-                    if (signal == ProcessManager.Signal.TERMINATE) {
-                        run = false;
-                        mainThread.interrupt();
-                    }
-                }
-            });
+            // Disassociate ourselves from our parents session group and process group.
+            JinixRuntime.getRuntime().setProcessSessionId();
 
             NameSpace rootNameSpace = JinixRuntime.getRuntime().getRootNamespace();
             LogServer ls = (LogServer) rootNameSpace.lookup(LogServer.SERVER_NAME).remote;
