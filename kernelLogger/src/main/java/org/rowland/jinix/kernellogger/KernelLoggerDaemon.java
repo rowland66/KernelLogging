@@ -45,8 +45,7 @@ public class KernelLoggerDaemon {
             // Disassociate ourselves from our parents session group and process group.
             JinixRuntime.getRuntime().setProcessSessionId();
 
-            NameSpace rootNameSpace = JinixRuntime.getRuntime().getRootNamespace();
-            LogServer ls = (LogServer) rootNameSpace.lookup(LogServer.SERVER_NAME).remote;
+            LogServer ls = (LogServer) JinixRuntime.getRuntime().lookup(LogServer.SERVER_NAME);
 
             OutputStream os = Files.newOutputStream(Paths.get("/var/log/kernel.log"),
                     StandardOpenOption.WRITE, StandardOpenOption.APPEND, StandardOpenOption.CREATE);
